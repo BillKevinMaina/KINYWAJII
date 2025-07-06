@@ -153,7 +153,7 @@ public class DatabaseManager {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT b.name, d.name, s.quantity FROM stock s JOIN branches b ON s.branch_id = b.id JOIN drinks d ON s.drink_id = d.id WHERE s.quantity < 50")) {
             while (rs.next()) {
-                alerts.add(rs.getString("name") + " at " + rs.getString("name") + " has " + rs.getInt("quantity") + " units");
+                alerts.add(rs.getString("name") + " at " + rs.getString("branch") + " has " + rs.getInt("quantity") + " units");
             }
         }
         return alerts;

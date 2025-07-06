@@ -137,22 +137,36 @@ public class AdminUI extends Application {
             statusLabel.setText("Error fetching branches or drinks: " + e.getMessage());
         }
 
-        ordersReportButton.setOnAction(e -> {
-            try {
-                out.println("GET_ORDERS_REPORT");
-                String report = in.readLine();
-                TextArea textArea = new TextArea(report.substring(1, report.length() - 1).replace("\"", ""));
-                textArea.setEditable(false);
-                Stage reportStage = new Stage();
-                reportStage.setScene(new Scene(textArea, 400, 300));
-                reportStage.setTitle("Orders Report");
-                reportStage.show();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                statusLabel.setText("Error fetching orders report: " + ex.getMessage());
+ordersReportButton.setOnAction(e -> {
+    try {
+        out.println("GET_ORDERS_REPORT");
+        String report = in.readLine();
+        System.out.println("Received orders report: " + report); // For debugging
+        if (report != null && !report.trim().isEmpty() && report.startsWith("[")) {
+            // Remove the square brackets
+            String content = report.substring(1, report.length() - 1);
+            // Split by comma to separate orders
+            String[] orders = content.split(",");
+            // Build the formatted string with each order on a new line
+            StringBuilder formattedOrders = new StringBuilder();
+            for (String order : orders) {
+                formattedOrders.append(order.trim()).append("\n");
             }
-        });
-
+            // Create and display the TextArea
+            TextArea textArea = new TextArea(formattedOrders.toString());
+            textArea.setEditable(false);
+            Stage reportStage = new Stage();
+            reportStage.setScene(new Scene(textArea, 400, 300));
+            reportStage.setTitle("Orders Report");
+            reportStage.show();
+        } else {
+            statusLabel.setText("No orders found.");
+        }
+    } catch (IOException ex) {
+        ex.printStackTrace();
+        statusLabel.setText("Error fetching orders report: " + ex.getMessage());
+    }
+});
         salesReportButton.setOnAction(e -> {
             try {
                 out.println("GET_SALES_REPORT");
@@ -175,8 +189,17 @@ public class AdminUI extends Application {
                 String allOrdersResponse = in.readLine();
                 System.out.println("Received all orders: " + allOrdersResponse);
                 if (allOrdersResponse != null && !allOrdersResponse.trim().isEmpty() && allOrdersResponse.startsWith("[")) {
-                    allOrdersResponse = allOrdersResponse.substring(1, allOrdersResponse.length() - 1).replace("\"", "");
-                    TextArea textArea = new TextArea(allOrdersResponse);
+                    // Remove the square brackets
+                    allOrdersResponse = allOrdersResponse.substring(1, allOrdersResponse.length() - 1);
+                    // Split the response into individual orders
+                    String[] orders = allOrdersResponse.split("\",\"");
+                    // Format each order with a newline
+                    StringBuilder formattedOrders = new StringBuilder();
+                    for (String order : orders) {
+                        formattedOrders.append(order.replace("\"", "").trim()).append("\n");
+                    }
+                    // Display in TextArea
+                    TextArea textArea = new TextArea(formattedOrders.toString());
                     textArea.setEditable(false);
                     Stage ordersStage = new Stage();
                     ordersStage.setScene(new Scene(textArea, 400, 400));
