@@ -94,9 +94,9 @@ public class DatabaseManager {
         List<Drink> drinks = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, name FROM drinks")) {
+             ResultSet rs = stmt.executeQuery("SELECT id, name, price FROM drinks")) {
             while (rs.next()) {
-                drinks.add(new Drink(rs.getInt("id"), rs.getString("name"), 0.0)); // Placeholder price
+                drinks.add(new Drink(rs.getInt("id"), rs.getString("name"), rs.getDouble("price")));
             }
             System.out.println("Fetched drinks from DB: " + drinks);
         } catch (SQLException e) {
@@ -151,9 +151,10 @@ public class DatabaseManager {
         List<String> alerts = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT b.name, d.name, s.quantity FROM stock s JOIN branches b ON s.branch_id = b.id JOIN drinks d ON s.drink_id = d.id WHERE s.quantity < 50")) {
+             ResultSet rs = stmt.executeQuery("SELECT b.name AS branch_name, d.name AS drink_name, s.quantity FROM stock s JOIN branches b ON s.branch_id = b.id JOIN drinks d ON s.drink_id = d.id WHERE s.quantity < 50")) {
             while (rs.next()) {
-                alerts.add(rs.getString("name") + " at " + rs.getString("branch") + " has " + rs.getInt("quantity") + " units");
+                String message = rs.getString("drink_name") + " at " + rs.getString("branch_name") + " has only " + rs.getInt("quantity") + " left";
+                alerts.add(message);
             }
         }
         return alerts;

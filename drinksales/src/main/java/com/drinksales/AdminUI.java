@@ -44,7 +44,7 @@ public class AdminUI extends Application {
         grid.setHgap(15);
         grid.setStyle("-fx-background-color: #FFFFFF; -fx-padding: 20px;");
 
-        Label banner = new Label("Kinywaji Enterprises");
+        Label banner = new Label("Kinywaji Enterprises - Admin Panel");
         banner.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #ffffff; -fx-background-color: linear-gradient(to right, #1E40AF, #E5E7EB); -fx-padding: 10px 20px; -fx-alignment: center;");
         grid.add(banner, 0, 0, 2, 1);
 
@@ -137,7 +137,7 @@ public class AdminUI extends Application {
             statusLabel.setText("Error fetching branches or drinks: " + e.getMessage());
         }
 
-ordersReportButton.setOnAction(e -> {
+     ordersReportButton.setOnAction(e -> {
     try {
         out.println("GET_ORDERS_REPORT");
         String report = in.readLine();
@@ -167,6 +167,7 @@ ordersReportButton.setOnAction(e -> {
         statusLabel.setText("Error fetching orders report: " + ex.getMessage());
     }
 });
+
         salesReportButton.setOnAction(e -> {
             try {
                 out.println("GET_SALES_REPORT");

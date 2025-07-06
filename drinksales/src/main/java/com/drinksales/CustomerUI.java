@@ -7,7 +7,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -141,14 +143,6 @@ public class CustomerUI extends Application {
                 String response = in.readLine();
                 System.out.println("Received server response: " + response);
                 statusLabel.setText(response);
-                String alerts = in.readLine();
-                System.out.println("Received stock alerts: " + alerts);
-                if (alerts != null && !alerts.equals("[]")) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Stock Alert");
-                    alert.setContentText(alerts.substring(1, alerts.length() - 1).replace("\"", ""));
-                    alert.showAndWait();
-                }
             } catch (NumberFormatException ex) {
                 statusLabel.setText("Quantity must be a number.");
                 System.out.println("Exception: Invalid number format - " + ex.getMessage());

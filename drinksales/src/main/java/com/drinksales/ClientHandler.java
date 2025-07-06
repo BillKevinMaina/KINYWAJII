@@ -68,7 +68,6 @@ public class ClientHandler implements Runnable {
                             db.placeOrder(customerId, branchId, drinkId, quantity);
 
                             out.println("Order placed successfully!");
-                            // 🔴 Stock alerts removed here to avoid sending to CustomerUI
                         } catch (SQLException e) {
                             out.println("Error placing order: " + e.getMessage());
                             e.printStackTrace();
